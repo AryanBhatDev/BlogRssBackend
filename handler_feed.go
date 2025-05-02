@@ -12,11 +12,10 @@ import (
 
 
 
-func (apiCfg *apiConfig)handlerCreateUser(w http.ResponseWriter, r *http.Request){
+func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Request,user database.User){
 	type parameters struct{
+		Url string `json:"url"`
 		Name string `json:"name"`
-		Email string `json:"email"`
-		Password string `json:"password"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	params := parameters{}
@@ -28,15 +27,15 @@ func (apiCfg *apiConfig)handlerCreateUser(w http.ResponseWriter, r *http.Request
 		respondWithError(w, 400, fmt.Sprintf("Error while decoding: %v",err))
 		return
 	}
-	user, err := apiCfg.DB.CreateUser(
+	feed, err := apiCfg.DB.CreateFeed(
 		r.Context(),
-		database.CreateUserParams{
+		database.CreateFeedParams{
 			ID:        uuid.New(),
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 			Name:      params.Name,
-			Email:     params.Email,
-			Password:  params.Password,
+			Url:	params.Url,
+			UserID: user.ID,
 	})
 
 	if err != nil {
@@ -44,10 +43,5 @@ func (apiCfg *apiConfig)handlerCreateUser(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	respondWithJson(w,200,databaseUserToUser(user))
-}
-
-func (apiCfg *apiConfig)handlerGetUser(w http.ResponseWriter, r *http.Request, user database.User){
-	
-	respondWithJson(w,200,databaseUserToGetUser(user))
+	respondWithJson(w,200,databaseFeedToFeed(feed))
 }
