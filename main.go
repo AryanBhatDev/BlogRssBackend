@@ -68,6 +68,7 @@ func main(){
 	v1Router.Get("/err",handleErr)
 	v1Router.Post("/user",apiCfg.handlerCreateUser)
 	v1Router.Get("/user",apiCfg.middleware(apiCfg.handlerGetUser))
+	v1Router.Post("/feed",apiCfg.middleware(apiCfg.handlerCreateFeed))
 
 	router.Mount("/api/v1",v1Router)
 
