@@ -13,9 +13,11 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users(id,created_at,updated_at,name,email,password)
-VALUES ($1,$2,$3,$4,$5,$6)
-RETURNING id, created_at, updated_at, name, email, password
+INSERT INTO users(id,created_at,updated_at,name,email,password,api_key)
+VALUES ($1,$2,$3,$4,$5,$6,
+    encode(sha256(random()::text::bytea),'hex')
+)
+RETURNING id, created_at, updated_at, name, email, password, api_key
 `
 
 type CreateUserParams struct {
@@ -44,6 +46,26 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Name,
 		&i.Email,
 		&i.Password,
+		&i.ApiKey,
+	)
+	return i, err
+}
+
+const getUserByApiKey = `-- name: GetUserByApiKey :one
+SELECT id, created_at, updated_at, name, email, password, api_key FROM users WHERE api_key =$1
+`
+
+func (q *Queries) GetUserByApiKey(ctx context.Context, apiKey string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByApiKey, apiKey)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.Email,
+		&i.Password,
+		&i.ApiKey,
 	)
 	return i, err
 }
