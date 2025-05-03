@@ -11,7 +11,7 @@ import (
 type User struct {
 	Name string `json:"name"`
 	Email string `json:"email"`
-	ApiKey string `json:apiKey`
+	ApiKey string `json:"apiKey"`
 }
 
 
@@ -20,6 +20,7 @@ type GetUser struct {
 	Email string `json:"email"`
 }
 type Feed struct {
+	ID string `json:"id"`
 	Name string `json:"name"`
 	Url string `json:"url"`
 }
@@ -46,6 +47,7 @@ func databaseUserToUser(dbUser database.User) User{
 
 func databaseFeedToFeed(dbFeed database.Feed) Feed{
 	return Feed{
+		ID: dbFeed.ID.String(),
 		Name:dbFeed.Name,
 		Url:dbFeed.Url,
 	}
