@@ -9,14 +9,26 @@ type User struct {
 	ApiKey string `json:apiKey`
 }
 
+
+type GetUser struct {
+	Name string `json:"name"`
+	Email string `json:"email"`
+}
 type Feed struct {
 	Name string `json:"name"`
 	Url string `json:"url"`
 }
 
-type GetUser struct {
-	Name string `json:"name"`
-	Email string `json:"email"`
+type FeedFollow struct {
+	UserID string `json:"user_id"`
+	FeedID string 	`json:"feed_id"`
+}
+
+func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow{
+	return FeedFollow{
+		UserID : dbFeedFollow.UserID.String(),
+		FeedID : dbFeedFollow.FeedID.String(),
+	}
 }
 
 func databaseUserToUser(dbUser database.User) User{
