@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/AryanBhatDev/blogrssbackend/internal/database"
 	"github.com/go-chi/chi"
@@ -58,6 +59,8 @@ func main(){
 		DB: queries,
 	}
 
+	go scrapperForever(queries,10,time.Minute)
+
 	router := chi.NewRouter()
 	
 	router.Use(cors.Handler(cors.Options{
@@ -81,6 +84,7 @@ func main(){
 	v1Router.Post("/user/feed/follow",apiCfg.middleware(apiCfg.handlerCreateFeedFollow))
 	v1Router.Get("/user/feed/follows/all",apiCfg.middleware(apiCfg.handlerGetFeedFollows))
 	v1Router.Post("/user/feed/follow/{feedFollowId}",apiCfg.middleware(apiCfg.handlerDeleteFeedFollow))
+	v1Router.Post("/user/posts",apiCfg.middleware(apiCfg.handlerGetPostsForUser))
 	router.Mount("/api/v1",v1Router)
 
 	srv := &http.Server{
