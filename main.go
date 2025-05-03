@@ -21,7 +21,15 @@ type apiConfig struct{
 
 func main(){
 
-	err := godotenv.Load(".env")
+	feed, err := urlToFeed("https://wagslane.dev/index.xml")
+
+	if err != nil{
+		log.Fatal(err)
+	}
+
+	fmt.Println(feed)
+
+	err = godotenv.Load(".env")
 
 	if err != nil{
 		log.Fatal("Cannot find .env file")
