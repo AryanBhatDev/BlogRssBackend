@@ -1,6 +1,6 @@
-## RSS BLOG AGGREGATOR
+# RSS BLOG AGGREGATOR
 
-# A backend service built in Go that aggregates and processes RSS feeds from blogs.
+## A backend service built in Go that aggregates and processes RSS feeds from blogs.
 
 - Fetches and processes RSS feeds from multiple sources
 - Stores blog posts in a structured database
