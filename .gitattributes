@@ -1,1 +1,1 @@
-/Users/aryanbhat/Desktop/Screen[[:space:]]Recording[[:space:]]2025-05-06[[:space:]]at[[:space:]]1.19.34 PM.mov filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
